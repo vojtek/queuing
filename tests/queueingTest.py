@@ -1,8 +1,3 @@
-# queuing
-Multithreating producent-consumer solution
-
-Example
-```python
 import queuing
 import time
 import logging
@@ -41,5 +36,3 @@ if __name__ == '__main__':
         })
 
     queuing.broker.loop()
-
-```
