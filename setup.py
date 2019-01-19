@@ -6,7 +6,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(name='queuing',
-      version='0.3.0',
+      version='0.3.1',
       description='Multithreating producent-consumer solution',
       long_description=README,
       long_description_content_type="text/markdown",

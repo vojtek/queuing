@@ -33,11 +33,11 @@ class Broker:
         """use consumer decorator"""
         self.qs[target.__name__] = Queue()
         self.thrs[target.__name__] = []
-        for i in range(0, instances):
-            thr = threading.Thread(target=self._consume, args=(target,))
+        for i in range(1, instances + 1):
+            thr = threading.Thread(target=self._consume, args=(target,), name="{}-{}".format(target.__name__, i))
             self.thrs[target.__name__].append(thr)
         [thr.start() for thr in self.thrs[target.__name__]]
-        log.info("consumer {} registered".format(target.__name__))
+        log.info("registered")
 
     def stop(self):
         self.work = False
@@ -51,23 +51,18 @@ class Broker:
             time.sleep(1)
         self.stop()
 
-    @staticmethod
-    def get_local_context():
-        return threading.local()
-
-    @staticmethod
-    def _consume(f):
-        log.info("consumer {} thread {} started".format(f.__name__, threading.get_ident()))
+    def _consume(self, f):
+        log.info("consumer started")
         while broker.is_consumer_working(f.__name__):
             kwargs = broker._get_message(f.__name__, timeout=1)
             if kwargs is None:
                 continue
-            log.debug("consumer {} thread {} get message".format(f.__name__, threading.get_ident()))
+            log.debug("consumer get message")
             try:
                 f(**kwargs)
             except Exception as ex:
-                log.error("consumer {} thread {} exception {}".format(f.__name__, threading.get_ident(), ex))
-        log.info("consumer {} thread {} stoped".format(f.__name__, threading.get_ident()))
+                log.error("consumer exception {}")
+        log.info("consumer stoped")
 
 
 # default broker
