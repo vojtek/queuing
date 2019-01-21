@@ -61,7 +61,7 @@ class Broker:
             try:
                 f(**kwargs)
             except Exception as ex:
-                log.error("consumer exception {}")
+                log.error("consumer exception {}".format(ex))
         log.info("consumer stoped")
 
 
